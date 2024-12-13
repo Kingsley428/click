@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Click Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .chart-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .chart {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+        }
+        .bar {
+            height: 30px; /* Fixed height for horizontal bars */
+            background-color: #4CAF50;
+            margin: 5px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .bar-label {
+            position: absolute;
+            left: 5px; /* Positioning the label inside the bar */
+            color: white;
+        }
+        .bar-subtitle {
+            margin-left: auto; /* Align subtitle to the right */
+            padding-right: 10px; /* Add some space to the right */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Button Click Tracker</h1>
+    <div class="button-container">
+        <!-- Generate 30 buttons -->
+        <script>
+            const buttonCounts = Array(30).fill(0);
+            let totalClicks = 0;
+
+            const updateChart = () => {
+                const chart = document.getElementById('chart');
+                chart.innerHTML = '';
+                buttonCounts.forEach((count, index) => {
+                    const bar = document.createElement('div');
+                    const width = totalClicks > 0 ? (count / totalClicks) * 100 : 0; // Percentage of total clicks
+                    bar.className = 'bar';
+                    bar.style.width = `${width}%`; // Set width as a percentage
+
+                    // Create a label for the bar
+                    const label = document.createElement('div');
+                    label.className = 'bar-label';
+                    label.textContent = `Button ${index + 1}`;
+
+                    // Create a subtitle for the bar
+                    const subtitle = document.createElement('div');
+                    subtitle.className = 'bar-subtitle';
+                    subtitle.textContent = `Clicks: ${count}`;
+
+                    bar.appendChild(label);
+                    bar.appendChild(subtitle);
+                    chart.appendChild(bar);
+                });
+            };
+
+            for (let i = 0; i < 30; i++) {
+                const button = document.createElement('button');
+                button.textContent = `Button ${i + 1}`;
+                button.onclick = () => {
+                    buttonCounts[i]++;
+                    totalClicks++;
+                    updateChart();
+                };
+                document.querySelector('.button-container').appendChild(button);
+            }
+        </script>
+    </div>
+
+    <div class="chart-container">
+        <div class="chart" id="chart"></div>
+    </div>
+
+</body>
+</html>
